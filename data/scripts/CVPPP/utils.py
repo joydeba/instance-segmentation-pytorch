@@ -4,8 +4,8 @@ import numpy as np
 
 def write_cache(env, cache):
     with env.begin(write=True) as txn:
-        for k, v in cache.iteritems():
-            txn.put(k, v)
+        for k, v in cache.items():
+            txn.put(str(k).encode(), str(v).encode())
 
 
 def create_dataset(
@@ -18,17 +18,17 @@ def create_dataset(
 
     assert(n_images == len(semantic_annotation_paths))
 
-    print 'Number of Images : {}'.format(n_images)
+    print('Number of Images : {}'.format(n_images))
 
     env = lmdb.open(output_path, map_size=1099511627776)
     cache = {}
     n_images_cntr = 1
-    for i in xrange(n_images):
+    for i in range(n_images):
         image_path = image_paths[i]
         semantic_annotation_path = semantic_annotation_paths[i]
         instance_annotation_path = instance_annotation_paths[i]
 
-        image = open(image_path, 'r').read()
+        image = open(image_path, 'rb').read()
 
         semantic_annotation = np.load(semantic_annotation_path)
         semantic_annotation_height = semantic_annotation.shape[0]
@@ -52,9 +52,9 @@ def create_dataset(
         if n_images_cntr % 50 == 0:
             write_cache(env, cache)
             cache = {}
-            print 'Processed %d / %d' % (n_images_cntr, n_images)
+            print('Processed %d / %d' % (n_images_cntr, n_images))
         n_images_cntr += 1
 
     cache['num-samples'] = str(n_images)
     write_cache(env, cache)
-    print 'Created dataset with {} samples'.format(n_images)
+    print ('Created dataset with {} samples'.format(n_images))

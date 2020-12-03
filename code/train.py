@@ -64,8 +64,7 @@ shutil.copytree(os.path.join(CODE_BASE_DIR, 'lib'),
                 os.path.join(model_save_path, 'lib'))
 
 if torch.cuda.is_available() and not opt.usegpu:
-    print 'WARNING: You have a CUDA device, so you should probably \
-        run with --usegpu'
+    print("WARNING: You have a CUDA device, so you should probably run with --usegpu")
 
 # Load Seeds
 random.seed(ts.SEED)
