@@ -8,6 +8,7 @@ import numpy as np
 import torch
 from lib import SegDataset, Model, AlignCollate
 
+
 parser = argparse.ArgumentParser()
 parser.add_argument('--model', default='',
                     help="Filepath of trained model (to continue training) \
