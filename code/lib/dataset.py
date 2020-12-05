@@ -6,7 +6,7 @@ from PIL import Image
 import lmdb
 import sys
 import numpy as np
-from StringIO import StringIO
+from io import StringIO
 
 from utils import ImageUtilities as IU
 
@@ -23,11 +23,11 @@ class SegDataset(Dataset):
                              readahead=False, meminit=False)
 
         if not self.env:
-            print 'Cannot read lmdb from {}'.format(self._lmdb_path)
+            print('Cannot read lmdb from {}'.format(self._lmdb_path))
             sys.exit(0)
 
         with self.env.begin(write=False) as txn:
-            self.n_samples = int(txn.get('num-samples'))
+            self.n_samples = int(txn.get('num-samples'.encode()))
 
     def __load_data(self, index):
 
@@ -39,7 +39,7 @@ class SegDataset(Dataset):
             width_key = 'width-{}'.format(index + 1)
             n_objects_key = 'n_objects-{}'.format(index + 1)
 
-            img = txn.get(image_key)
+            img = txn.get(image_key.encode())
             img = Image.open(StringIO(img))
 
             height = int(txn.get(height_key))
@@ -327,12 +327,12 @@ if __name__ == '__main__':
     ds = SegDataset('../../data/processed/CVPPP/lmdb/training-lmdb/')
     image, semantic_annotation, instance_annotation, n_objects = ds[5]
 
-    print image.size
-    print semantic_annotation.shape
-    print instance_annotation.shape
-    print n_objects
-    print np.unique(semantic_annotation)
-    print np.unique(instance_annotation)
+    print(image.size)
+    print(semantic_annotation.shape)
+    print(instance_annotation.shape)
+    print(n_objects)
+    print(np.unique(semantic_annotation))
+    print(np.unique(instance_annotation))
 
     ac = AlignCollate('training', 9, 120, [0.0, 0.0, 0.0],
                       [1.0, 1.0, 1.0], 256, 512)
@@ -347,8 +347,8 @@ if __name__ == '__main__':
     images, semantic_annotations, instance_annotations, \
         n_objects = loader.next()
 
-    print images.size()
-    print semantic_annotations.size()
-    print instance_annotations.size()
-    print n_objects.size()
-    print n_objects
+    print(images.size())
+    print(semantic_annotations.size())
+    print(instance_annotations.size())
+    print(n_objects.size())
+    print(n_objects)

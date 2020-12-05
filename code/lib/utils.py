@@ -1,6 +1,6 @@
 from PIL import Image
 import torchvision.transforms as transforms
-from StringIO import StringIO
+from io import StringIO
 
 from preprocess import RandomResizedCrop, RandomHorizontalFlip, \
     RandomVerticalFlip, RandomTranspose, RandomRotate, \
