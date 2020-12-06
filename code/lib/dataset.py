@@ -6,7 +6,8 @@ from PIL import Image
 import lmdb
 import sys
 import numpy as np
-from io import StringIO
+from io import StringIO, BytesIO
+import io
 
 from utils import ImageUtilities as IU
 
@@ -39,8 +40,8 @@ class SegDataset(Dataset):
             width_key = 'width-{}'.format(index + 1)
             n_objects_key = 'n_objects-{}'.format(index + 1)
 
-            img = txn.get(image_key.encode())
-            img = Image.open(StringIO(img))
+            img = txn.get(image_key.encode())     
+            img = Image.open(BytesIO(img))
 
             height = int(txn.get(height_key))
             width = int(txn.get(width_key))
@@ -324,7 +325,7 @@ class AlignCollate(object):
 
 
 if __name__ == '__main__':
-    ds = SegDataset('../../data/processed/CVPPP/lmdb/training-lmdb/')
+    ds = SegDataset('data/processed/CVPPP/lmdb/training-lmdb/')
     image, semantic_annotation, instance_annotation, n_objects = ds[5]
 
     print(image.size)
